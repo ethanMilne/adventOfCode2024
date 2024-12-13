@@ -58,12 +58,10 @@ def isSafe(lineList):
     return safety
          
 
-
-
-
 def main():
     print("run your functions with this simple trick")
     safetyCount = fileRunner("puzzleInput.txt")
+    # safetyCount = fileRunner("exampleInput.txt")
     print("There are", safetyCount, "safe files")
 
 main()

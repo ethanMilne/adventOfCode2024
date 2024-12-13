@@ -44,7 +44,9 @@ def isSafe(lineList):
     listLength = len(lineList)
     direction = lineList[0] - lineList[1] #this num will be negative or positive, showing the direction the
                                           #String should be going the whole time
-    if direction < 0:
+    if direction == 0:
+        direction = 0
+    elif direction < 0:
         direction = -1
     elif direction > 0:
         direction = 1
@@ -58,18 +60,19 @@ def isSafe(lineList):
             safety = False
             break
         if((lineList[i] - lineList[i+1] < 0 and direction != -1) or
-           (lineList[i] - lineList[i+1] > 0 and direction != 1)):
+           (lineList[i] - lineList[i+1] > 0 and direction != 1) or
+           (direction == 0)):
             safety = False
             break
     return safety
          
 def removeLevels(lineList):
 
+    failedTests = []# find some of the failed tests to see what I'm doing wrong
     levelCounter = 0 #to count how many safe levels there are
     originalTest = isSafe(lineList)# if a level is safe, we don't need to iterate through and remove levels
     if (not originalTest):
         #sequentially remove each index in lineList and test whether isSafe()
-        # print("Now you're removing levels")
         lineLength = len(lineList)
         for index in range(lineLength):
 
@@ -77,12 +80,15 @@ def removeLevels(lineList):
             for listIndex in lineList: #copy into temp variable so actual list doesn't get changed
                 newLineList.append(listIndex)
 
-            print("This is the original line:", lineList)
-            print("This is the copied line:", newLineList)
-            newLineList.remove(newLineList[index])
             # print("This is the original line:", lineList)
-            print("This is the changed line:", newLineList)
+            # print("This is the copied line:", newLineList)
+            newLineList.remove(newLineList[index])
+            # print("This is the changed line:", newLineList)
             boolean = isSafe(newLineList)
+            if not boolean:# see what tests failed and why
+                # print('in the statement')
+                failedTests.append(newLineList)
+
             if boolean:
                 levelCounter += 1
                 break
@@ -90,6 +96,10 @@ def removeLevels(lineList):
         # add one to the level counter and move on
         levelCounter += 1
 
+    # print("All the failed tests:")
+    if failedTests != []:
+        print(failedTests)
+    # print(failedTests)
     return levelCounter
 
 
@@ -97,6 +107,7 @@ def removeLevels(lineList):
 def main():
     print("run your functions with this simple trick")
     safetyCount = fileRunner("puzzleInput.txt")
+    # safetyCount = fileRunner("exampleInput.txt")
     print("There are", safetyCount, "safe files")
 
 main()
